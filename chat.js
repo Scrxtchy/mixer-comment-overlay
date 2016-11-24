@@ -13,7 +13,8 @@ var username = usernameRegx.exec(document.URL);
 if (username) {
     username = username[1];
 } else {
-    window.location = document.URL + "?user=tenryuu";
+    var username = window.prompt("Please enter your username", "Matt");
+    window.location = "https://scrxtchy.github.io/beam-comment-overlay/?user=" + username;
 }
 
 var channelrequest = new XMLHttpRequest();
@@ -82,7 +83,7 @@ function beamSocketConnect(endpoints, UserID) {
             var connector = JSON.stringify({ type: "method", method: "auth", arguments: [UserID], id: 1 });
             ws.send(connector);
             console.log('Connection Opened...');
-            createText("Connected to chat");
+            createText("Connected to " + username);
 
             // Error Handling & Keep Alive
             setInterval(function () {
@@ -143,7 +144,6 @@ function chat(evt) {
 
                         if (element.type != "text" || (element.type == "text" && !/^\ ?$/.test(element.text))) { //If it's not what we want (a blank message)
                             display = false; //Return and say we want to show the author
-                            console.log('"' + element.text + '" made us lose!');
                             return;
                         }
                     }
