@@ -1,0 +1,62 @@
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Scroll Chat</title>
+	<!--<meta http-equiv="refresh" content="60"> -->
+	<script src="socket.js"></script>
+	<script src="chat.js"></script>
+
+
+</script>
+	<style>
+		html {
+			background-color: transparent;
+		}
+		
+		@keyframes a {
+			0% {
+				transform: translate(0, 0);
+			}
+			100% {
+				transform: translate(-100%, 0);
+			}
+		}
+		
+		#content {
+			top: 0;
+			right: 0;
+			left: 0;
+			bottom: 0;
+			font-size: 4em;
+			font-family: 'Microsoft YaHei';
+			font-weight: bold;
+			color: #fff;
+			-webkit-text-stroke: 0.5pt black;
+			text-shadow: 1pt 0 0 #000, 0 -1pt 0 #000, 0 1pt 0 #000, -1pt 0 0 #000;
+			position: absolute;
+			white-space: nowrap;
+			overflow: hidden;
+		}
+		
+		#te {
+			animation: a 5s linear;
+			padding-left: 100%;
+			position: absolute;
+		}
+		
+		.emoticon {
+			transform: scale(2);
+			margin-bottom: 0.1em;
+		}
+	</style>
+</head>
+
+<body>
+	<div id='content'>
+
+
+	</div>
+</body>
+
+</html>
