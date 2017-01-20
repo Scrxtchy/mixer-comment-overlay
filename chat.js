@@ -5,17 +5,13 @@
 
 var chatUserId = 0;
 
-var TTL = 3; // Secons to live
+
 //document.getElementById('#te').style.animationDuration = TTL + 's';
 
-var TTLcss = document.createElement('style');
-TTLcss.type = 'text/css';
-TTLcss.innerHTML = '#te {animation-duration: ' + TTL + 's !important;}';
-document.getElementsByTagName('head')[0].appendChild(TTLcss);
-
-var usernameRegx = /user=(.+)&?/
+var usernameRegx = /user=(\w+)&?/
+var TTLregex = /TTL=(\d+\.\d+)|(\d+)&?/
 var username = usernameRegx.exec(document.URL);
-
+var TTL = TTLregex.exec(document.URL); // Secons to live
 
 if (username) {
     username = username[1];
@@ -23,6 +19,23 @@ if (username) {
     var username = window.prompt("Please enter your username", "Matt");
     window.location = "https://scrxtchy.github.io/beam-comment-overlay/?user=" + username;
 }
+
+if (TTL){
+    if (TTL[2]) {
+        TTL = TTL[2]
+    } else {
+        TTL = TTL[1]
+    }
+} else {
+    TTL = 5;
+}
+
+var TTLcss = document.createElement('style');
+TTLcss.type = 'text/css';
+TTLcss.innerHTML = '#te {animation-duration: ' + TTL + 's !important;}';
+document.getElementsByTagName('head')[0].appendChild(TTLcss);
+
+
 
 var channelrequest = new XMLHttpRequest();
 channelrequest.open('GET', 'https://beam.pro/api/v1/channels/' + username, true);
@@ -130,6 +143,7 @@ function chat(evt) {
         var username = eventMessage.user_name;
         // var userrolesSrc = eventMessage.user_roles;
         // var userroles = userrolesSrc.toString().replace(/,/g, " ");
+        //console.log(eventMessage);
         var usermessage = eventMessage.message.message;
         if (usermessage.length > 140) return; //Only show messages shorter than 140Char
         if (usermessage.length > 1) { //if message has two or more parts
@@ -141,7 +155,7 @@ function chat(evt) {
 
                 usermessage.forEach(function (element) {
                     count = count + 1; //Count +1
-                    console.log(count);
+                    //console.log(count);
                     if (count % 2 == 0) { //if it's in a emoticon spot
                         if (element.type != "emoticon") { //If it's not what we want (an emoticon)
                             display = false; //Return and say we want to show the author
@@ -161,11 +175,11 @@ function chat(evt) {
         }
 
         //$.each(usermessage, function() {
+        var txtLength = 0;
         usermessage.forEach(function (message) {
-
             var type = message.type;
-
             if (type == "text") {
+                txtLength = txtLength + message.data.length;
                 var messageTextOrig = message.data;
                 var messageText = messageTextOrig.replace(/([<>&])/g, function (chr) {
                     return chr === "<" ? "&lt;" : chr === ">" ? "&gt;" : "&amp;";
@@ -182,16 +196,19 @@ function chat(evt) {
                     completeMessage += '<span class="emoticon" style="background-image:url(' + emoticonPack + '); background-position:-' + emoticonCoordX + 'px -' + emoticonCoordY + 'px; height:24px; width:24px; display:inline-block;"></span>';
                 }
             } else if (type == "link") {
+                txtLength = txtLength + message.data.length;
                 var chatLinkOrig = message.text;
                 var chatLink = chatLinkOrig.replace(/(<([^>]+)>)/ig, "");
                 completeMessage += chatLink;
             } else if (type == "tag") {
+                txtLength = txtLength + message.data.length;
                 var userTag = message.text;
                 completeMessage += userTag;
             }
         });
 
-
+        //console.log(txtLength);
+        if (txtLength > 150) return;
         createText(completeMessage, messageID);
 
     } else if (eventType == "ClearMessages") {
