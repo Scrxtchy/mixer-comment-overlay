@@ -1,8 +1,3 @@
-
-
-
-
-
 var chatUserId = 0;
 
 
