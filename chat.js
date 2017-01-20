@@ -5,6 +5,13 @@
 
 var chatUserId = 0;
 
+var TTL = 3; // Secons to live
+//document.getElementById('#te').style.animationDuration = TTL + 's';
+
+var TTLcss = document.createElement('style');
+TTLcss.type = 'text/css';
+TTLcss.innerHTML = '#te {animation-duration: ' + TTL + 's !important;}';
+document.getElementsByTagName('head')[0].appendChild(TTLcss);
 
 var usernameRegx = /user=(.+)&?/
 var username = usernameRegx.exec(document.URL);
@@ -124,7 +131,7 @@ function chat(evt) {
         // var userrolesSrc = eventMessage.user_roles;
         // var userroles = userrolesSrc.toString().replace(/,/g, " ");
         var usermessage = eventMessage.message.message;
-        console.log(usermessage);
+        if (usermessage.length > 140) return; //Only show messages shorter than 140Char
         if (usermessage.length > 1) { //if message has two or more parts
             if (usermessage[1].type == "tag") {
                 return; //and the first one is a tag, do not display
@@ -217,7 +224,7 @@ function createText(text, id) {
     setTimeout(function () {
         item.remove();
         delete flyouts[id];
-    }, 5000);
+    }, TTL * 1000);
 }
 
 // Error Handling & Keep Alive

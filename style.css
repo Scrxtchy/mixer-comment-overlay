@@ -1,5 +1,5 @@
 body {
-	background-color: springgreen;
+	background-color: black;
 }
 
 @keyframes a {
@@ -28,7 +28,7 @@ body {
 }
 
 #te { 
-	animation: a 5s linear infinite;
+	animation: a linear infinite;
 	right: 10%;
 	position: absolute;
 }
