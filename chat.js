@@ -12,7 +12,7 @@ if (username) {
     username = username[1];
 } else {
     var username = window.prompt("Please enter your username", "Matt");
-    window.location = "https://scrxtchy.github.io/beam-comment-overlay/?user=" + username;
+    window.location = "https://scrxtchy.github.io/mixer-comment-overlay/?user=" + username;
 }
 
 if (TTL){
@@ -33,7 +33,7 @@ document.getElementsByTagName('head')[0].appendChild(TTLcss);
 
 
 var channelrequest = new XMLHttpRequest();
-channelrequest.open('GET', 'https://beam.pro/api/v1/channels/' + username, true);
+channelrequest.open('GET', 'https://mixer.com/api/v1/channels/' + username, true);
 
 channelrequest.onload = function () {
     if (this.status >= 200 && this.status < 400) {
@@ -42,13 +42,13 @@ channelrequest.onload = function () {
         //chatUserId = data.Id;
 
         var socketrequest = new XMLHttpRequest();
-        socketrequest.open('GET', 'https://beam.pro/api/v1/chats/' + data.id, true);
+        socketrequest.open('GET', 'https://mixer.com/api/v1/chats/' + data.id, true);
         socketrequest.onload = function () {
             if (this.status >= 200 && this.status < 400) {
                 // Success!
                 var chatdata = JSON.parse(this.response);
                 var endpoints = chatdata.endpoints
-                beamSocketConnect(endpoints, data.id);
+                mixerSocketConnect(endpoints, data.id);
             } else {
                 // We reached our target server, but it returned an error
                 console.log('There was a connection error, server sie');
@@ -84,8 +84,8 @@ var chatTime = 0;
 timeToShowChat = chatTime; // in Milliseconds
 
 // CHAT
-// Connect to Beam Websocket
-function beamSocketConnect(endpoints, UserID) {
+// Connect to mixer Websocket
+function mixerSocketConnect(endpoints, UserID) {
     if ("WebSocket" in window) {
 
         // Let us open a web socket
@@ -130,7 +130,7 @@ function chat(evt) {
     var eventType = evtString.event;
     var eventMessage = evtString.data;
     //console.log(evtString)
-    var completeMessage = "<img style='width: 0.8em; height: 0.8em;' src='https://beam.pro/api/v1/users/" + eventMessage.user_id + "/avatar'/>:"; //Avatar
+    var completeMessage = "<img class='imgAvatar' style='width: 0.8em; height: 0.8em;' src='https://mixer.com/api/v1/users/" + eventMessage.user_id + "/avatar'/>:"; //Avatar
     var messageID = eventMessage.id;
 
     if (eventType == "ChatMessage") {
@@ -186,7 +186,7 @@ function chat(evt) {
                 var emoticonCoordX = message.coords.x;
                 var emoticonCoordY = message.coords.y;
                 if (emoticonSource == "builtin") {
-                    completeMessage += '<span class="emoticon" style="background-image:url(https:\/\/beam.pro/_latest/emoticons/' + emoticonPack + '.png); background-position:-' + emoticonCoordX + 'px -' + emoticonCoordY + 'px; height:24px; width:24px; display:inline-block;"></span>';
+                    completeMessage += '<span class="emoticon" style="background-image:url(https:\/\/mixer.com/_latest/emoticons/' + emoticonPack + '.png); background-position:-' + emoticonCoordX + 'px -' + emoticonCoordY + 'px; height:24px; width:24px; display:inline-block;"></span>';
                 } else if (emoticonSource == "external") {
                     completeMessage += '<span class="emoticon" style="background-image:url(' + emoticonPack + '); background-position:-' + emoticonCoordX + 'px -' + emoticonCoordY + 'px; height:24px; width:24px; display:inline-block;"></span>';
                 }

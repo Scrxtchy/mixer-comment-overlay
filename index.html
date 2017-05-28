@@ -13,10 +13,6 @@
 		html {
 			background-color: transparent;
 		}
-
-		body {
-			background-color: black !important;
-		}
 		
 		@keyframes a {
 			0% {
@@ -53,6 +49,14 @@
 			transform: scale(2);
 			margin-bottom: 0.1em;
 		}
+
+		.imgAvatar {
+			-webkit-clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+	        clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+	        -webkit-clip-path: url("#polygon-clip-hexagon");
+        	clip-path: url("#polygon-clip-hexagon");
+    	}
+
 	</style>
 </head>
 
@@ -61,6 +65,13 @@
 
 
 	</div>
+	<svg class="clip-svg">
+  		<defs>
+    		<clipPath id="polygon-clip-hexagon" clipPathUnits="objectBoundingBox">
+      			<polygon points="0.25 0, 0.75 0, 1 0.5, 0.75 1, 0.25 1, 0 0.5" />
+    		</clipPath>
+  		</defs>
+	</svg>
 </body>
 
 </html>
